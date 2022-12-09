@@ -12,8 +12,9 @@ export default class SquadNameValidator extends BasePlugin {
     static get optionsSpecification() {
         return {
             // ...DiscordBasePlugin.optionsSpecification,
+            warningMessage: "Your squad has been disbanded due to non-compliant name.\n\nForbidden: %FORBIDDEN%",
             rules: {
-                required: "",
+                required: true,
                 description: "",
                 default: [
                     {
@@ -74,7 +75,7 @@ export default class SquadNameValidator extends BasePlugin {
         this.verbose(1, "Squad Created:", info.player.teamID, info.player.squadID, disband)
         if (disband) {
             this.server.rcon.execute(`AdminDisbandSquad ${info.player.teamID} ${info.player.squadID}`);
-            this.warn(info.player.steamID, `Your squad has been eliminated due to non-compliant name.\n\nForbidden: ${disband}`)
+            this.warn(info.player.steamID, this.options.warningMessage.replace(/\%FORBIDDEN\%/, disband))
         }
     }
 

@@ -8,6 +8,7 @@ Every rule is CASE-INSENSITIVE
 {
     "plugin": "SquadNameValidator",
     "enabled": true,
+    "warningMessage": "Your squad has been disbanded due to non-compliant name.\n\nForbidden: %FORBIDDEN%",
     "rules": [
         {
             "type": "regex",
