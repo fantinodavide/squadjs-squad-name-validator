@@ -11,7 +11,7 @@ Every rule is CASE-INSENSITIVE
     "rules": [
         {
             "type": "regex",
-            "rule": "[^a-z0-9\\=\\[\\]\\!\\.]"
+            "rule": "[^a-z0-9\\=\\[\\]\\!\\.\\s]"
         }
     ]
 }
