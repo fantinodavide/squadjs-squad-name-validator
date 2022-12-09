@@ -29,12 +29,15 @@ export default class SquadNameValidator extends DiscordBasePlugin {
                 default: [
                     {
                         type: "regex",
-                        rule: /[^a-z\d=\$\[\]\!\.\s\-]/
+                        logic: "match=allow",
+                        rule: /a-z\d=\$\[\]\!\.\s\-/
                     }
                 ],
                 example: [
                     {
                         type: "regex",
+                        logic: "match=disband",
+                        logic: "match=allow",
                         rule: /[^a-z\d=\$\[\]\!\.\s\-]/
                     },
                     {
@@ -66,12 +69,23 @@ export default class SquadNameValidator extends DiscordBasePlugin {
 
     onSquadCreated(info) {
         let disband = false;
+        let rule = null;
         for (let r of this.options.rules) {
             switch (r.type.toLowerCase()) {
                 case 'regex':
+                    r.rule = r.rule.replace(/^\//,'').replace(/\/$/,'')
+                    
                     const reg = new RegExp(r.rule, "gi");
-                    disband = info.squadName.match(reg)
-                    if (disband) disband = disband.join(', ')
+                    const regRes = info.squadName.match(reg)
+
+                    switch (r.logic.toLowerCase()) {
+                        case 'match=allow':
+                            if (!regRes) disband = info.squadName;
+                            break;
+                        case 'match=disband':
+                        default:
+                            if (regRes) disband = disband.join(', ')
+                    }
                     // this.verbose(1, "Testing rule", info.squadName, reg, disband)
                     break;
                 case 'equals':
@@ -82,6 +96,9 @@ export default class SquadNameValidator extends DiscordBasePlugin {
                     break;
                 default:
             }
+
+            rule = r;
+
             if (disband) continue
         }
         this.verbose(1, "Squad Created:", info.player.teamID, info.player.squadID, disband)
@@ -89,11 +106,12 @@ export default class SquadNameValidator extends DiscordBasePlugin {
         if (disband) {
             this.server.rcon.execute(`AdminDisbandSquad ${info.player.teamID} ${info.player.squadID}`);
             this.warn(info.player.steamID, this.options.warningMessage.replace(/\%FORBIDDEN\%/, disband))
-            this.discordLog(info, disband)
+            this.discordLog(info, disband, rule)
         }
     }
 
-    async discordLog(info, forbidden) {
+    async discordLog(info, forbidden, rule = null) {
+        let regex = rule ? new RegExp(rule.rule, "gi").toString() : null;
         await this.sendDiscordMessage({
             embed: {
                 title: `Squad Disbanded: ${info.squadName}`,
@@ -117,7 +135,9 @@ export default class SquadNameValidator extends DiscordBasePlugin {
                         name: 'Forbidden Chars/Word',
                         value: forbidden
                     },
-                ],
+                    (regex ? { name: 'Logic', value: rule.logic.toLowerCase(), inline: true } : null),
+                    (regex ? { name: 'Regex', value: regex.toString(), inline: true } : null)
+                ].filter(e => e),
                 timestamp: info.time.toISOString()
             }
         });

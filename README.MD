@@ -3,6 +3,15 @@ Squad Name Validator plugin for SquadJS.
 Automatically disbans squads if their name is not compliant to specific rules.
 Every rule is CASE-INSENSITIVE
 
+### Rule format
+```json
+{
+    "type": "regex | equals | includes",
+    "logic": "MATCH=DISBAND | match=allow",
+    "rule": "[^a-z\\d=\\$\\[\\]\\!\\.\\s\\-] | WORD"
+}
+```
+
 ### Example configuration
 ```json
 {
@@ -12,6 +21,7 @@ Every rule is CASE-INSENSITIVE
     "rules": [
         {
             "type": "regex",
+            "logic": "match=disband",
             "rule": "[^a-z\\d=\\$\\[\\]\\!\\.\\s\\-]"
         },
         {
