@@ -12,7 +12,7 @@ Every rule is CASE-INSENSITIVE
     "rules": [
         {
             "type": "regex",
-            "rule": "[^a-z\\d=\\$\\[\\]\\!\\.\\s]"
+            "rule": "[^a-z\\d=\\$\\[\\]\\!\\.\\s\\-]"
         },
         {
             "type": "equals",
