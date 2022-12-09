@@ -17,6 +17,8 @@ Every rule is CASE-INSENSITIVE
 {
     "plugin": "SquadNameValidator",
     "enabled": true,
+    "discordClient": "discord",
+    "channelID": "1116600997722661199",
     "warningMessage": "Your squad has been disbanded due to non-compliant name.\n\nForbidden: %FORBIDDEN%",
     "rules": [
         {
