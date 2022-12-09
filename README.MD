@@ -21,6 +21,11 @@ Every rule is CASE-INSENSITIVE
     "rules": [
         {
             "type": "regex",
+            "logic": "match=allow",
+            "rule": "/[a-z\\d]/"
+        },
+        {
+            "type": "regex",
             "logic": "match=disband",
             "rule": "[^a-z\\d=\\$\\[\\]\\!\\.\\s\\-]"
         },
