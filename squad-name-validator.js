@@ -18,7 +18,7 @@ export default class SquadNameValidator extends BasePlugin {
                 default: "Your squad has been disbanded due to non-compliant name.\n\nForbidden: %FORBIDDEN%",
             },
             rules: {
-                required: true,
+                required: false,
                 description: "",
                 default: [
                     {
