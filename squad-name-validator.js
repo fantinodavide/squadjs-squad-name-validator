@@ -12,7 +12,11 @@ export default class SquadNameValidator extends BasePlugin {
     static get optionsSpecification() {
         return {
             // ...DiscordBasePlugin.optionsSpecification,
-            warningMessage: "Your squad has been disbanded due to non-compliant name.\n\nForbidden: %FORBIDDEN%",
+            warningMessage: {
+                required: false,
+                description: "",
+                default: "Your squad has been disbanded due to non-compliant name.\n\nForbidden: %FORBIDDEN%",
+            },
             rules: {
                 required: true,
                 description: "",
