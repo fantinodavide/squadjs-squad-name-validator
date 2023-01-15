@@ -84,7 +84,7 @@ export default class SquadNameValidator extends DiscordBasePlugin {
                             break;
                         case 'match=disband':
                         default:
-                            if (regRes) disband = disband.join(', ')
+                            if (regRes) disband = regRes.join(', ')
                     }
                     // this.verbose(1, "Testing rule", info.squadName, reg, disband)
                     break;
