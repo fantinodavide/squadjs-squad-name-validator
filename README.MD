@@ -6,9 +6,21 @@ Every rule is CASE-INSENSITIVE
 ### Rule format
 ```json
 {
-    "type": "regex | equals | includes",
+    "type": "regex | equals | includes | startsWith | endsWith",
     "logic": "MATCH=DISBAND | match=allow",
     "rule": "[^a-z\\d=\\$\\[\\]\\!\\.\\s\\-] | WORD"
+}
+```
+
+### Useful Rules
+```json
+{
+    {
+        "description": "Disband every ARMOR/ARMOUR/VIC/VEHICLE and other variants",
+        "type": "regex",
+        "logic": "match=disband",
+        "rule": "/(a ?r ?m ?(?:o|e)? ?u? ?r)|(v ?i ?c)|(v ?e ?h ?i ?c ?l ?e)/"
+    }
 }
 ```
 

@@ -73,8 +73,8 @@ export default class SquadNameValidator extends DiscordBasePlugin {
         for (let r of this.options.rules) {
             switch (r.type.toLowerCase()) {
                 case 'regex':
-                    r.rule = r.rule.replace(/^\//,'').replace(/\/$/,'')
-                    
+                    r.rule = r.rule.replace(/^\//, '').replace(/\/$/, '')
+
                     const reg = new RegExp(r.rule, "gi");
                     const regRes = info.squadName.match(reg)
 
@@ -94,12 +94,18 @@ export default class SquadNameValidator extends DiscordBasePlugin {
                 case 'includes':
                     disband = info.squadName.toLowerCase().includes(r.rule.toLowerCase()) ? r.rule : false
                     break;
+                case 'startsWith':
+                    disband = info.squadName.toLowerCase().startsWith(r.rule.toLowerCase()) ? r.rule : false
+                    break;
+                case 'endsWith':
+                    disband = info.squadName.toLowerCase().endsWith(r.rule.toLowerCase()) ? r.rule : false
+                    break;
                 default:
             }
 
             rule = r;
 
-            if (disband) continue
+            if (disband) break
         }
         this.verbose(1, "Squad Created:", info.player.teamID, info.player.squadID, disband)
 
