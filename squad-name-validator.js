@@ -110,8 +110,9 @@ export default class SquadNameValidator extends DiscordBasePlugin {
         this.verbose(1, "Squad Created:", info.player.teamID, info.player.squadID, disband)
 
         if (disband) {
+            const disbandMessage = rule.warningMessage || this.options.warningMessage;
             this.server.rcon.execute(`AdminDisbandSquad ${info.player.teamID} ${info.player.squadID}`);
-            this.warn(info.player.steamID, this.options.warningMessage.replace(/\%FORBIDDEN\%/, disband))
+            this.warn(info.player.steamID, disbandMessage.replace(/\%FORBIDDEN\%/ig, disband))
             this.discordLog(info, disband, rule)
         }
     }

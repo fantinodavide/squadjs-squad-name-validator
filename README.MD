@@ -6,9 +6,11 @@ Every rule is CASE-INSENSITIVE
 ### Rule format
 ```json
 {
+    "description": "(Optional) Human-readable description",
     "type": "regex | equals | includes | startsWith | endsWith",
     "logic": "MATCH=DISBAND | match=allow",
-    "rule": "[^a-z\\d=\\$\\[\\]\\!\\.\\s\\-] | WORD"
+    "rule": "[^a-z\\d=\\$\\[\\]\\!\\.\\s\\-] | WORD",
+    "warningMessage": "(Optional) This warning message will override the default message.\n\nForbidden: %FORBIDDEN%", 
 }
 ```
 
@@ -36,9 +38,11 @@ Every rule is CASE-INSENSITIVE
         {
             "type": "regex",
             "logic": "match=allow",
-            "rule": "/[a-z\\d]/"
+            "rule": "/[a-z\\d]/",
+            "warningMessage": "This warning message will override the default message.\n\nForbidden: %FORBIDDEN%",    
         },
         {
+            "description": "",
             "type": "regex",
             "logic": "match=disband",
             "rule": "[^a-z\\d=\\$\\[\\]\\!\\.\\s\\-]"
