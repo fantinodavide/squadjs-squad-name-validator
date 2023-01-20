@@ -14,14 +14,14 @@ Every rule is CASE-INSENSITIVE
 
 ### Useful Rules
 ```json
-{
+[
     {
         "description": "Disband every ARMOR/ARMOUR/VIC/VEHICLE and other variants",
         "type": "regex",
         "logic": "match=disband",
         "rule": "/(a ?r ?m ?(?:o|e)? ?u? ?r)|(v ?i ?c)|(v ?e ?h ?i ?c ?l ?e)/"
     }
-}
+]
 ```
 
 ### Example configuration
