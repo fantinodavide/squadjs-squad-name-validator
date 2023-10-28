@@ -23,6 +23,11 @@ export default class SquadNameValidator extends DiscordBasePlugin {
                 description: "",
                 default: "Your squad has been disbanded due to non-compliant name.\n\nForbidden: %FORBIDDEN%",
             },
+            preventLowerCaseSquadNames: {
+                required: false,
+                default: false,
+                description: "Disband Squads which names contain lowercase characters",
+            },
             rules: {
                 required: false,
                 description: "",
@@ -70,6 +75,12 @@ export default class SquadNameValidator extends DiscordBasePlugin {
     onSquadCreated(info) {
         let disband = false;
         let rule = null;
+
+        if (this.options.preventLowerCaseSquadNames && info.squadName.match(/[a-z]/) && !info.squadName.match(/Squad \d{1,2}/)) {
+            this.warn(info.player.steamID, `Squad names cannot be created with lowecase letters`)
+            this.server.rcon.execute(`AdminDisbandSquad ${info.player.teamID} ${info.player.squadID}`);
+        }
+
         for (let r of this.options.rules) {
             switch (r.type.toLowerCase()) {
                 case 'regex':
