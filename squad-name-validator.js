@@ -77,7 +77,7 @@ export default class SquadNameValidator extends DiscordBasePlugin {
         let rule = null;
 
         if (this.options.preventLowerCaseSquadNames && info.squadName.match(/[a-z]/) && !info.squadName.match(/Squad \d{1,2}/)) {
-            this.warn(info.player.steamID, `Squad names cannot be created with lowecase letters`)
+            this.warn(info.player.steamID, `Squad names cannot contain lowecase letters`)
             this.server.rcon.execute(`AdminDisbandSquad ${info.player.teamID} ${info.player.squadID}`);
         }
 
