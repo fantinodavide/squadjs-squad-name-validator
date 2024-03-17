@@ -10,7 +10,8 @@ Every rule is CASE-INSENSITIVE
     "type": "regex | equals | includes | startsWith | endsWith",
     "logic": "MATCH=DISBAND | match=allow",
     "rule": "[^a-z\\d=\\$\\[\\]\\!\\.\\s\\-] | WORD",
-    "warningMessage": "(Optional) This warning message will override the default message.\n\nForbidden: %FORBIDDEN%", 
+    "warningMessage": "(Optional) This warning message will override the default message.\n\nForbidden: %FORBIDDEN%",
+    "resetNameInsteadOfDisband": "true | false Resets the squad name to the default format 'Squad X' instead of disbanding it"
 }
 ```
 
@@ -35,6 +36,7 @@ Every rule is CASE-INSENSITIVE
     "channelID": "1116600997722661199",
     "warningMessage": "Your squad has been disbanded due to non-compliant name.\n\nForbidden: %FORBIDDEN%",
     "preventLowerCaseSquadNames": true,
+    "resetNameInsteadOfDisband": true,
     "rules": [
         {
             "type": "regex",

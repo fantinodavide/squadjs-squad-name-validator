@@ -28,6 +28,11 @@ export default class SquadNameValidator extends DiscordBasePlugin {
                 default: false,
                 description: "Disband Squads which names contain lowercase characters",
             },
+            resetNameInsteadOfDisband: {
+                required: false,
+                default: true,
+                description: "Resets the squad name to the default format 'Squad X' instead of disbanding it",
+            },
             rules: {
                 required: false,
                 description: "",
@@ -35,7 +40,8 @@ export default class SquadNameValidator extends DiscordBasePlugin {
                     {
                         type: "regex",
                         logic: "match=allow",
-                        rule: /a-z\d=\$\[\]\!\.\s\-/
+                        rule: /a-z\d=\$\[\]\!\.\s\-/,
+                        resetNameInsteadOfDisband: true
                     }
                 ],
                 example: [
@@ -51,7 +57,8 @@ export default class SquadNameValidator extends DiscordBasePlugin {
                     },
                     {
                         type: "includes",
-                        rule: "F*CK"
+                        rule: "F*CK",
+                        resetNameInsteadOfDisband: false
                     }
                 ]
             }
@@ -74,6 +81,7 @@ export default class SquadNameValidator extends DiscordBasePlugin {
 
     onSquadCreated(info) {
         let disband = false;
+        let resetNameInsteadOfDisband = this.options.resetNameInsteadOfDisband;
         let rule = null;
 
         if (this.options.preventLowerCaseSquadNames && info.squadName.match(/[a-z]/) && !info.squadName.match(/Squad \d{1,2}/)) {
@@ -82,6 +90,9 @@ export default class SquadNameValidator extends DiscordBasePlugin {
         }
 
         for (let r of this.options.rules) {
+            if (r.resetNameInsteadOfDisband != undefined)
+                resetNameInsteadOfDisband = r.resetNameInsteadOfDisband;
+
             switch (r.type.toLowerCase()) {
                 case 'regex':
                     r.rule = r.rule.replace(/^\//, '').replace(/\/$/, '')
@@ -94,6 +105,7 @@ export default class SquadNameValidator extends DiscordBasePlugin {
                             if (!regRes) disband = info.squadName;
                             break;
                         case 'match=disband':
+                        case 'match=block':
                         default:
                             if (regRes) disband = regRes.join(', ')
                     }
@@ -122,7 +134,7 @@ export default class SquadNameValidator extends DiscordBasePlugin {
 
         if (disband) {
             const disbandMessage = rule.warningMessage || this.options.warningMessage;
-            this.server.rcon.execute(`AdminDisbandSquad ${info.player.teamID} ${info.player.squadID}`);
+            this.server.rcon.execute(`${resetNameInsteadOfDisband ? 'AdminRenameSquad' : 'AdminDisbandSquad'} ${info.player.teamID} ${info.player.squadID}`);
             this.warn(info.player.steamID, disbandMessage.replace(/\%FORBIDDEN\%/ig, disband))
             this.discordLog(info, disband, rule)
         }
